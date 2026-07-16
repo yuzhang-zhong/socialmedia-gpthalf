@@ -16,6 +16,10 @@ Assess four related but non-interchangeable questions:
 
 Never merge these into one score. The bundled text rules are untrained and uncalibrated: even dense convergence may produce only a descriptive `strong_ai_like_drafting_signals` label, never “likely AI-written.” Never use genericness, awkwardness, or aversion as proof of AI origin. Never describe `no_reliable_ai_evidence` as proof of human authorship.
 
+## GPT-5.6 integration
+
+For the OpenAI Build Week version, run this Skill in Codex with GPT-5.6. GPT-5.6 performs the public-context reading, blind Human Reception draft, evidence synthesis, and plain-language explanation. The Python analyzer validates the structured inputs and enforces the evidence policy. If the active runtime is not confirmed as GPT-5.6, do not imply that the Build Week runtime requirement has been satisfied.
+
 ## Required references
 
 Read only the references needed for the task:

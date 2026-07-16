@@ -1,0 +1,70 @@
+{
+  "method": "stance_personas_v1",
+  "audience_assumptions": [
+    "Readers familiar with Chinese social-media humor and Honor of Kings"
+  ],
+  "reader_views": [
+    {
+      "persona": "supporter",
+      "likely_reaction": "A reader who enjoys the game reference may find the historical setup playful and easy to share.",
+      "aversion_risk": "low",
+      "friction_points": [],
+      "positive_signals": [
+        {
+          "statement": "The post uses a recognizable in-game phrase as the center of the joke.",
+          "excerpt": "快上身",
+          "reason": "The phrase gives game-aware readers a concrete point of recognition."
+        }
+      ],
+      "uncertainty": "The reader's familiarity with Honor of Kings is unknown."
+    },
+    {
+      "persona": "neutral",
+      "likely_reaction": "A neutral reader may understand the joke but feel that the long mock-investigation delays an obvious punchline.",
+      "aversion_risk": "medium",
+      "friction_points": [
+        {
+          "dimension": "genericness",
+          "excerpt": "我带着这些疑问，查阅了大量的资料",
+          "reason": "The stock research transition makes the satire feel more templated than conversational."
+        }
+      ],
+      "positive_signals": [],
+      "uncertainty": "The intended platform and expected post length are unknown."
+    },
+    {
+      "persona": "skeptic",
+      "likely_reaction": "A skeptical reader may see the repeated questions and over-explained conclusion as engagement bait.",
+      "aversion_risk": "high",
+      "friction_points": [
+        {
+          "dimension": "genericness",
+          "excerpt": "为什么不写瑶？为什么他在穿越帕米尔高原",
+          "reason": "The repeated question structure stretches a simple joke into a formulaic sequence."
+        },
+        {
+          "dimension": "specificity",
+          "excerpt": "时间上的错位，从根源上阻断了他在游记中提及瑶的可能",
+          "reason": "The formal explanation restates a punchline that readers already understand."
+        }
+      ],
+      "positive_signals": [],
+      "uncertainty": "The post may intentionally imitate an AI-generated explainer as part of the joke."
+    }
+  ],
+  "cross_reader_patterns": [
+    {
+      "statement": "The obvious joke is extended through formal research language.",
+      "excerpt": "从根源上阻断了他在游记中提及瑶的可能",
+      "reason": "Neutral and skeptical readers may both notice the gap between the simple punchline and the formal explanation.",
+      "personas": [
+        "neutral",
+        "skeptic"
+      ]
+    }
+  ],
+  "uncertainties": [
+    "These reactions are inferred, not observed.",
+    "The analysis does not know whether the templated style is intentional parody."
+  ]
+}

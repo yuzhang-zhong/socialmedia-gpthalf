@@ -59,6 +59,24 @@ Use $socialmedia-gpthalf to analyze this public social media post for AI-origin 
 
 See the [input and output contract](references/input-output-contract.md) for structured analysis.
 
+### OpenAI Build Week demo
+
+I built the Skill with Codex and use GPT-5.6 as its reasoning layer. GPT-5.6 reads the public context, drafts Human Reception before detector results are visible, and explains the final report. The Python scripts validate the inputs and keep every conclusion inside the evidence rules. Codex helped turn the first idea into the working Skill, CLI, privacy checks, and 86 passing tests.
+
+The included sample is a deliberately synthetic Chinese social post. It is useful because the writing patterns are strong while verified origin evidence is still missing. That lets the demo show why a careful tool should explain both facts instead of hiding them behind one percentage.
+
+Run the sample without an API key:
+
+```bash
+python scripts/social_ai_check.py analyze \
+  --input demo/sample-case.json \
+  --reception demo/sample-reception.json \
+  --output-dir demo/run \
+  --format both
+```
+
+The command writes `demo/run/report.json` and `demo/run/report.md`. The narrated Build Week demo is in `demo/devpost/`.
+
 ### Limits
 
 - No AI evidence does not mean "written by a human"
@@ -112,6 +130,10 @@ pip install -r "$skill_dir/scripts/requirements.txt"
 ```
 
 结构化分析方式见[输入输出契约](references/input-output-contract.md)。
+
+### OpenAI Build Week 演示
+
+这个 Skill 由 Codex 协助完成，并由 GPT-5.6 负责理解公开语境、在盲态下分析读者反应，再解释最终报告。Python 脚本负责校验输入和约束判断边界。仓库中的示例无需 API 密钥即可运行，演示文件位于 `demo/devpost/`。
 
 ### 使用限制
 
