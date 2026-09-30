@@ -59,6 +59,14 @@ Use $socialmedia-gpthalf to analyze this public social media post for AI-origin 
 
 See the [input and output contract](references/input-output-contract.md) for structured analysis.
 
+### Tech stack
+
+- **Python 3 CLI** — `scripts/social_ai_check.py` (argparse) analyzes a case and writes `report.json` / `report.md`.
+- **Dependencies** — `requests>=2.32,<3` and `c2pa-python==0.36.0` (see `scripts/requirements.txt`).
+- **Modules** — `evidence` (origin and practical evidence, report rendering), `local_text_detector` + `style_signals` (offline Simplified-Chinese pattern scan), `c2pa_verify` (C2PA Content Credentials), `providers` (optional Hive image analysis), plus `media_security`, `redaction`, `reception_schema`, and `local_model`.
+- **Codex Skill** — `SKILL.md` defines the Skill interface; the OpenAI Build Week version uses GPT-5.6 as its reasoning layer.
+- **Tests** — pytest suite with 86 passing tests.
+
 ### OpenAI Build Week demo
 
 I built the Skill with Codex and use GPT-5.6 as its reasoning layer. GPT-5.6 reads the public context, drafts Human Reception before detector results are visible, and explains the final report. The Python scripts validate the inputs and keep every conclusion inside the evidence rules. Codex helped turn the first idea into the working Skill, CLI, privacy checks, and 86 passing tests.
@@ -77,6 +85,8 @@ python scripts/social_ai_check.py analyze \
 
 The command writes `demo/run/report.json` and `demo/run/report.md`. The narrated Build Week demo is in `demo/devpost/`.
 
+<!-- TODO: add screenshot -->
+
 ### Limits
 
 - No AI evidence does not mean "written by a human"
@@ -84,6 +94,10 @@ The command writes `demo/run/report.json` and `demo/run/report.md`. The narrated
 - Evidence found in one image does not automatically apply to the caption or the whole post
 - External image analysis requires permission for each image
 - Reports should not be used for punishment, hiring, legal findings, school sanctions, or automatic bans
+
+### License
+
+This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
 
 ## 中文
 
@@ -131,9 +145,19 @@ pip install -r "$skill_dir/scripts/requirements.txt"
 
 结构化分析方式见[输入输出契约](references/input-output-contract.md)。
 
+### 技术栈
+
+- **Python 3 命令行工具** — `scripts/social_ai_check.py`（基于 argparse）分析输入用例并生成 `report.json` / `report.md`。
+- **依赖** — `requests>=2.32,<3` 和 `c2pa-python==0.36.0`（见 `scripts/requirements.txt`）。
+- **模块** — `evidence`（来源与实用证据、报告渲染）、`local_text_detector` + `style_signals`（离线简体中文模式扫描）、`c2pa_verify`（C2PA 内容凭证）、`providers`（可选的 Hive 图片分析），以及 `media_security`、`redaction`、`reception_schema`、`local_model`。
+- **Codex Skill** — `SKILL.md` 定义 Skill 接口；OpenAI Build Week 版本以 GPT-5.6 作为推理层。
+- **测试** — pytest 测试套件，共 86 个通过的测试。
+
 ### OpenAI Build Week 演示
 
 这个 Skill 由 Codex 协助完成，并由 GPT-5.6 负责理解公开语境、在盲态下分析读者反应，再解释最终报告。Python 脚本负责校验输入和约束判断边界。仓库中的示例无需 API 密钥即可运行，演示文件位于 `demo/devpost/`。
+
+<!-- TODO: add screenshot -->
 
 ### 使用限制
 
@@ -142,5 +166,9 @@ pip install -r "$skill_dir/scripts/requirements.txt"
 - 一张图片中的来源证据，不能自动扩大到配文或整个帖子
 - 外部图片分析需要逐张授权
 - 报告不应该用于处罚、招聘、司法判断、教育处分或自动封禁
+
+### 许可证
+
+本项目采用 MIT 许可证，详情见 [LICENSE](LICENSE) 文件。
 
 <p align="center"><sub>Logo created for SocialMedia GPTHalf with OpenAI ImageGen.</sub></p>
