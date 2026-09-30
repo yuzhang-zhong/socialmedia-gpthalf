@@ -10,3 +10,8 @@ report.md
 case.json
 reception.json
 tmp/
+node_modules/
+.DS_Store
+*.pem
+dist/
+build/
