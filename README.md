@@ -1,174 +1,121 @@
-<p align="center">
-  <img src="assets/socialmedia-gpthalf-logo.png" width="220" alt="SocialMedia GPTHalf logo">
-</p>
-
+<p align="center"><img src="assets/socialmedia-gpthalf-logo.png" width="180" alt="SocialMedia GPTHalf logo"></p>
 <h1 align="center">SocialMedia GPTHalf</h1>
+<p align="center"><strong>Three questions. Not one “AI percentage.”</strong><br>Origin evidence · Writing patterns · Likely reader reactions<br>来源证据、文本模式、读者感受，分开判断。</p>
+<p align="center"><a href="#see-a-real-sample">Demo</a> · <a href="#quick-start">Quick start</a> · <a href="#how-the-pieces-fit">How it works</a> · <a href="#中文">中文</a></p>
 
-<p align="center">
-  Check AI-origin evidence and likely reader reactions to public social-media content.<br>
-  检查公开社交媒体内容的 AI 来源证据，以及读者可能产生的反应。
-</p>
+A Codex Skill and Python CLI for examining public social-media content without pretending that an uncalibrated detector can establish authorship. It keeps provenance, visible writing patterns, and inferred audience reactions separate, with quoted evidence and explicit limits.
 
-<p align="center">
-  <a href="#english">English</a> · <a href="#中文">中文</a>
-</p>
+## See a real sample
 
-## English
+[![Existing Build Week slide showing the synthetic sample: strong writing-pattern signals, insufficient origin evidence, and different reader reactions](demo/devpost/slides/slide-03.png)](demo/devpost/SocialMedia-GPTHalf-Demo.mp4)
 
-SocialMedia GPTHalf is a Codex Skill for checking public posts, webpages, text, and images. It reports the evidence it can find and makes its limits clear.
+[Watch the narrated demo](demo/devpost/SocialMedia-GPTHalf-Demo.mp4) · [Read the synthetic input](demo/sample-case.json) · [Inspect the supplied reception analysis](demo/sample-reception.json)
 
-### Why I built it
+The included Chinese history-and-gaming parody deliberately has strong templated writing patterns but no verified origin evidence. Running the sample produces:
 
-AI has made it cheap to publish at scale. One draft can be translated and rewritten for several platforms in minutes. That is useful, but it also lets content farms publish fake expertise and engagement bait at a much lower cost.
-
-Most AI detectors reduce the question to a percentage. The number looks precise, but the evidence usually is not. A detector only sees the finished text. It cannot see who wrote the outline, how much a person edited, or whether AI changed one sentence or the whole post.
-
-One study of seven detectors found a 61.3% average false-positive rate on its sample of human-written TOEFL essays. In that case, predictable language became [a signal of language background rather than AI authorship](https://pmc.ncbi.nlm.nih.gov/articles/PMC10382961/).
-
-Platform labels help when the metadata survives. They still miss content after some edits and reposts. Meta changed "Made with AI" to "AI info" after lightly edited media received labels that [did not match what people expected](https://about.fb.com/news/2024/04/metas-approach-to-labeling-ai-generated-content-and-manipulated-media/). TikTok is also testing systems aimed at accounts that [post AI spam and crowd out original creators](https://newsroom.tiktok.com/helping-people-spot-and-understand-ai-generated-content-on-tiktok?lang=en-GB).
-
-When people say a post "sounds like AI," they may mean that it is vague, repetitive, salesy, or emotionally empty. That reaction is worth explaining, but it does not prove who wrote the post. People write generic copy too, and AI-assisted writing can be specific and honest.
-
-GPTHalf handles these questions separately. It checks origin evidence, points out visible writing patterns, and estimates how different readers may respond. It does not combine them into an "AI score."
-
-### What it checks
-
-| Part | What it uses | Limit |
+| Separate question | Sample result | What it does **not** mean |
 | --- | --- | --- |
-| Origin | Author disclosures, platform labels, C2PA data, and optional image checks | Missing evidence does not prove human authorship |
-| Text patterns | Quoted Simplified-Chinese document and sentence patterns | A pattern match is not an AI probability |
-| Reader response | Supporter, neutral-reader, and skeptic views tied to excerpts | These are estimates, not audience research or origin evidence |
+| Are recognizable drafting patterns present? | `strong_ai_like_drafting_signals`; rule indicator **13** | Not 13%, not a calibrated probability, not proof of AI authorship |
+| Is there verified AI-origin evidence? | `insufficient_evidence`; confidence `low` | Missing evidence does not establish human authorship |
+| How might readers react? | Supplied supporter / neutral / skeptic views have low / medium / high aversion risk | These are inferred personas, not measured audience reactions |
 
-The Skill accepts a public URL, pasted text, images, or a combination. It can write `report.json` and `report.md`. It does not monitor accounts, scan posts in bulk, or make enforcement decisions.
+The slide is an existing project demo artifact, not a live product screenshot. The CLI validates and incorporates the supplied reception JSON; it does not independently generate those reader views during this offline run.
 
-### Install
+## Quick start
 
-```bash
-skill_dir=.agents/skills/socialmedia-gpthalf
-git clone \
-  https://github.com/yuzhang-zhong/socialmedia-gpthalf.git \
-  "$skill_dir"
-pip install -r "$skill_dir/scripts/requirements.txt"
-```
+### Run the reproducible sample
 
-### Use
-
-```text
-Use $socialmedia-gpthalf to analyze this public social media post for AI-origin evidence and likely human reader reactions.
-```
-
-See the [input and output contract](references/input-output-contract.md) for structured analysis.
-
-### Tech stack
-
-- **Python 3 CLI** — `scripts/social_ai_check.py` (argparse) analyzes a case and writes `report.json` / `report.md`.
-- **Dependencies** — `requests>=2.32,<3` and `c2pa-python==0.36.0` (see `scripts/requirements.txt`).
-- **Modules** — `evidence` (origin and practical evidence, report rendering), `local_text_detector` + `style_signals` (offline Simplified-Chinese pattern scan), `c2pa_verify` (C2PA Content Credentials), `providers` (optional Hive image analysis), plus `media_security`, `redaction`, `reception_schema`, and `local_model`.
-- **Codex Skill** — `SKILL.md` defines the Skill interface; the OpenAI Build Week version uses GPT-5.6 as its reasoning layer.
-- **Tests** — pytest suite with 86 passing tests.
-
-### OpenAI Build Week demo
-
-I built the Skill with Codex and use GPT-5.6 as its reasoning layer. GPT-5.6 reads the public context, drafts Human Reception before detector results are visible, and explains the final report. The Python scripts validate the inputs and keep every conclusion inside the evidence rules. Codex helped turn the first idea into the working Skill, CLI, privacy checks, and 86 passing tests.
-
-The included sample is a deliberately synthetic Chinese social post. It is useful because the writing patterns are strong while verified origin evidence is still missing. That lets the demo show why a careful tool should explain both facts instead of hiding them behind one percentage.
-
-Run the sample without an API key:
+Use Python 3. A virtual environment keeps the project dependencies isolated:
 
 ```bash
+git clone https://github.com/yuzhang-zhong/socialmedia-gpthalf.git
+cd socialmedia-gpthalf
+python -m venv .venv
+# macOS / Linux
+source .venv/bin/activate
+# Windows PowerShell: .venv\Scripts\Activate.ps1
+python -m pip install -r scripts/requirements.txt
+
 python scripts/social_ai_check.py analyze \
   --input demo/sample-case.json \
   --reception demo/sample-reception.json \
-  --output-dir demo/run \
-  --format both
+  --output-dir demo/run --format both
 ```
 
-The command writes `demo/run/report.json` and `demo/run/report.md`. The narrated Build Week demo is in `demo/devpost/`.
+Read `demo/run/report.md` or consume `demo/run/report.json`. This bundled text-only example needs no API key and makes no external image-analysis request. Its `example.com` source URL is a synthetic identifier, not evidence from a retrieved page.
 
-<!-- TODO: add screenshot -->
+### Use it as a Codex Skill
 
-### Limits
+From the project where you want the Skill available:
 
-- No AI evidence does not mean "written by a human"
-- A negative reader reaction does not prove AI use
-- Evidence found in one image does not automatically apply to the caption or the whole post
-- External image analysis requires permission for each image
-- Reports should not be used for punishment, hiring, legal findings, school sanctions, or automatic bans
+```bash
+git clone https://github.com/yuzhang-zhong/socialmedia-gpthalf.git \
+  .agents/skills/socialmedia-gpthalf
+```
 
-### License
+Install the requirements from that cloned directory, reload your host's Skills, then ask:
 
-This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
+```text
+Use $socialmedia-gpthalf to analyze this public social media post.
+Keep AI-origin evidence separate from writing patterns and likely reader reactions.
+```
+
+The Skill workflow can work from public URLs, pasted text, images, or combinations when its host has the necessary tools. The standalone CLI consumes a structured case file; it is not a general-purpose crawler. See the [input/output contract](references/input-output-contract.md).
+
+## How the pieces fit
+
+| Layer | Responsibility | Main entry point |
+| --- | --- | --- |
+| Host Agent / Skill | Gather authorized public context; draft reader analysis before detector results; explain findings | [`SKILL.md`](SKILL.md) |
+| Case and reception validation | Check schema, source scope, quoted support and persona structure | [`social_ai_check.py`](scripts/social_ai_check.py), [`reception_schema.py`](scripts/reception_schema.py) |
+| Local text analysis | Describe Simplified-Chinese sentence/document patterns with transparent rules | [`local_text_detector.py`](scripts/local_text_detector.py), [`style_signals.py`](scripts/style_signals.py) |
+| Provenance and optional providers | Inspect available C2PA evidence and separately authorized external image analysis | [`c2pa_verify.py`](scripts/c2pa_verify.py), [`providers.py`](scripts/providers.py) |
+| Report | Preserve separate origin, practical-pattern and reception conclusions | [`evidence.py`](scripts/evidence.py) |
+
+The OpenAI Build Week demo was built with Codex and used GPT-5.6 for its reasoning layer. That describes the demo workflow, not a mandatory model dependency embedded in the offline CLI. Runtime dependencies are pinned/ranged in [`scripts/requirements.txt`](scripts/requirements.txt).
+
+## Evidence, not accusation
+
+- Style can be produced by people, templates, translators, or language models. The local heuristic is **not a calibrated AI detector**.
+- Negative reader reactions do not prove AI use. Persona analysis is speculative and may miss the intended genre, joke, or audience.
+- Provenance for one image does not automatically apply to the caption or the whole post. Missing or stripped metadata is inconclusive.
+- External image analysis requires permission **for each image**; do not silently send private media to a provider.
+- This project does not monitor accounts, bulk-scan posts, or make enforcement decisions. Do not use reports for punishment, hiring, legal findings, school sanctions, or automatic bans.
+
+## Verify and extend
+
+```bash
+python -m unittest discover -s scripts/tests
+```
+
+The 86-test suite checks implementation behavior, validation, and safety boundaries. Passing tests are **not** evidence of real-world accuracy, recall, or false-positive rates. The optional external provider still requires its own configuration and authorization.
+
+- [Evidence policy](references/evidence-policy.md) · [Local text method](references/local-text-detection.md)
+- [Human reception protocol](references/human-reception.md) · [Evaluation protocol](references/evaluation-protocol.md)
+- [Research basis](references/research-basis.md) · [Platform workflow](references/platform-workflow.md)
 
 ## 中文
 
-SocialMedia GPTHalf 是一个 Codex Skill，用来检查公开帖子、网页、文本和图片。它会说明找到了什么证据，也会明确哪些地方无法判断。
+SocialMedia GPTHalf 是一个分析公开社交内容的 Codex Skill 和 Python CLI。它不把“像不像 AI”“有没有来源证据”“读者是否反感”揉成一个貌似精确的百分比。
 
-### 为什么做这个项目
+### 先看示例，再看结论
 
-AI 把批量发布内容的成本降得很低。一份草稿可以在几分钟内翻译和改写，再投到不同平台。这当然方便，但内容农场也能用更低的成本批量生产假专业和情绪诱饵。
+上方真实演示文件使用仓库自带的**合成中文帖子**。离线命令可复现三个不同结果：文本规则点数为 13，来源证据不足，预先提供的支持者 / 中立者 / 怀疑者分析分别给出低 / 中 / 高反感风险。**规则点数不是 AI 率；读者分析不是实测调查。** CLI 负责验证和纳入 `sample-reception.json`，不是在本地自动生成这些观点。
 
-很多 AI 检测工具把问题简化成一个百分比。数字看起来很明确，证据却未必有那么明确。检测器只能看到最后的成稿。它不知道提纲是谁写的，也不知道人改了多少，或者 AI 只动了一句话还是写了整篇。
+按照 Quick start 克隆、安装依赖后，运行示例即可得到 Markdown 与 JSON 报告，无需 API key。完整 Skill 可在宿主工具支持时处理公开链接、文本与图片；独立 CLI 读取结构化输入文件，不会因为提供了 URL 就自动抓取网页。
 
-误报不是小问题。一项针对七种检测器的研究显示，在其人类撰写的托福作文样本上，平均误报率达到 61.3%。在这个案例里，可预测的语言更像是在反映[写作者的语言背景，而不是 AI 作者身份](https://pmc.ncbi.nlm.nih.gov/articles/PMC10382961/)。
+### 使用边界
 
-平台标签可以提供帮助，但前提是元数据没有在编辑和转载中丢失。Meta 把 "Made with AI" 改成 "AI info"，原因之一是轻微使用 AI 编辑的媒体也被贴上了[不符合用户预期的标签](https://about.fb.com/news/2024/04/metas-approach-to-labeling-ai-generated-content-and-manipulated-media/)。TikTok 也开始测试针对[批量发布 AI 垃圾内容、挤压原创作者的账号检测](https://newsroom.tiktok.com/helping-people-spot-and-understand-ai-generated-content-on-tiktok?lang=en-GB)。
+- 没有 AI 来源证据，不代表已经证明由人类创作。
+- 文本模式命中、套话或读者反感，都不能单独认定作者身份。
+- 图片来源证据不能随意扩大到配文或整个帖子；外部图片分析需逐张授权。
+- 不用于处罚、招聘、司法认定、教育处分或自动封禁。
+- 86 项测试验证程序行为与边界，不代表检测准确率或误报率已经得到校准。
 
-人们说一篇帖子 "像 AI"，有时是在说它空泛、重复、像广告，或者没有真实情绪。这种阅读感受值得分析，但不能拿来证明作者身份。人也会写出模板文案，AI 辅助的内容也可能具体、坦诚。
+## License / 许可证
 
-GPTHalf 把这些问题分开处理。它检查来源证据，指出文本中能看到的写作模式，再分析不同读者可能怎么理解。它不会把这些内容混成一个 "AI 率"。
+This project is licensed under the MIT License. See [LICENSE](LICENSE).
 
-### 检查内容
-
-| 部分 | 使用的依据 | 判断边界 |
-| --- | --- | --- |
-| 来源 | 作者披露、平台标签、C2PA 数据和可选图片检查 | 没有证据不能证明由人类创作 |
-| 文本模式 | 带原文引用的简体中文文档级和句子级模式 | 命中模式不等于 AI 概率 |
-| 读者反应 | 支持者、中立读者和怀疑者对具体片段的反应 | 这里只是推测，不是真实受众调查，也不是来源证据 |
-
-Skill 支持公开 URL、粘贴文本、图片或组合输入，可以生成 `report.json` 和 `report.md`。它不监控账号，不批量扫描帖子，也不负责处罚或封禁。
-
-### 安装
-
-```bash
-skill_dir=.agents/skills/socialmedia-gpthalf
-git clone \
-  https://github.com/yuzhang-zhong/socialmedia-gpthalf.git \
-  "$skill_dir"
-pip install -r "$skill_dir/scripts/requirements.txt"
-```
-
-### 使用
-
-```text
-使用 $socialmedia-gpthalf 分析这个公开社交媒体帖子，分别核验 AI 来源证据和可能的人类阅读反应。
-```
-
-结构化分析方式见[输入输出契约](references/input-output-contract.md)。
-
-### 技术栈
-
-- **Python 3 命令行工具** — `scripts/social_ai_check.py`（基于 argparse）分析输入用例并生成 `report.json` / `report.md`。
-- **依赖** — `requests>=2.32,<3` 和 `c2pa-python==0.36.0`（见 `scripts/requirements.txt`）。
-- **模块** — `evidence`（来源与实用证据、报告渲染）、`local_text_detector` + `style_signals`（离线简体中文模式扫描）、`c2pa_verify`（C2PA 内容凭证）、`providers`（可选的 Hive 图片分析），以及 `media_security`、`redaction`、`reception_schema`、`local_model`。
-- **Codex Skill** — `SKILL.md` 定义 Skill 接口；OpenAI Build Week 版本以 GPT-5.6 作为推理层。
-- **测试** — pytest 测试套件，共 86 个通过的测试。
-
-### OpenAI Build Week 演示
-
-这个 Skill 由 Codex 协助完成，并由 GPT-5.6 负责理解公开语境、在盲态下分析读者反应，再解释最终报告。Python 脚本负责校验输入和约束判断边界。仓库中的示例无需 API 密钥即可运行，演示文件位于 `demo/devpost/`。
-
-<!-- TODO: add screenshot -->
-
-### 使用限制
-
-- 没有发现 AI 证据，不等于证明由人类创作
-- 读者反感，不能证明内容使用了 AI
-- 一张图片中的来源证据，不能自动扩大到配文或整个帖子
-- 外部图片分析需要逐张授权
-- 报告不应该用于处罚、招聘、司法判断、教育处分或自动封禁
-
-### 许可证
-
-本项目采用 MIT 许可证，详情见 [LICENSE](LICENSE) 文件。
+本项目采用 MIT 许可证，详情见 [LICENSE](LICENSE)。
 
 <p align="center"><sub>Logo created for SocialMedia GPTHalf with OpenAI ImageGen.</sub></p>
