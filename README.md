@@ -1,7 +1,21 @@
-<p align="center"><img src="assets/socialmedia-gpthalf-logo.png" width="180" alt="SocialMedia GPTHalf logo"></p>
-<h1 align="center">SocialMedia GPTHalf</h1>
-<p align="center"><strong>Three questions. Not one “AI percentage.”</strong><br>Origin evidence · Writing patterns · Likely reader reactions<br>来源证据、文本模式、读者感受，分开判断。</p>
-<p align="center"><a href="#see-a-real-sample">Demo</a> · <a href="#quick-start">Quick start</a> · <a href="#how-the-pieces-fit">How it works</a> · <a href="#中文">中文</a></p>
+<div align="center">
+
+<img src="assets/socialmedia-gpthalf-logo.png" width="180" alt="SocialMedia GPTHalf logo" />
+
+# SocialMedia GPTHalf
+
+**Three questions. Not one “AI percentage.”**
+
+Origin evidence · Writing patterns · Likely reader reactions  
+来源证据、文本模式、读者感受，分开判断。
+
+[![Skill and CLI](https://img.shields.io/badge/Interface-Codex_Skill_%2B_Python-2563eb)](SKILL.md)
+[![Sample](https://img.shields.io/badge/Demo-Reproducible_sample-0f766e)](#see-a-real-sample)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+
+[Demo](#see-a-real-sample) · [Quick start](#quick-start) · [How it works](#how-the-pieces-fit) · [Evidence boundaries](#evidence-not-accusation) · [中文](#中文)
+
+</div>
 
 A Codex Skill and Python CLI for examining public social-media content without pretending that an uncalibrated detector can establish authorship. It keeps provenance, visible writing patterns, and inferred audience reactions separate, with quoted evidence and explicit limits.
 
