@@ -1,23 +1,21 @@
 <div align="center">
 
-<img src="assets/socialmedia-gpthalf-logo.png" width="180" alt="SocialMedia GPTHalf logo" />
+<img src="assets/socialmedia-gpthalf-logo.png" width="128" alt="SocialMedia GPTHalf logo" />
 
 # SocialMedia GPTHalf
 
-**Three questions. Not one “AI percentage.”**
+**Separate AI-origin evidence, writing patterns, and reader reactions.**
 
-Origin evidence · Writing patterns · Likely reader reactions  
 来源证据、文本模式、读者感受，分开判断。
 
 [![Skill and CLI](https://img.shields.io/badge/Interface-Codex_Skill_%2B_Python-2563eb)](SKILL.md)
-[![Sample](https://img.shields.io/badge/Demo-Reproducible_sample-0f766e)](#see-a-real-sample)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 [Demo](#see-a-real-sample) · [Quick start](#quick-start) · [How it works](#how-the-pieces-fit) · [Evidence boundaries](#evidence-not-accusation) · [中文](#中文)
 
 </div>
 
-A Codex Skill and Python CLI for examining public social-media content without pretending that an uncalibrated detector can establish authorship. It keeps provenance, visible writing patterns, and inferred audience reactions separate, with quoted evidence and explicit limits.
+A Codex Skill and Python CLI for examining public social-media content. It reports provenance, visible writing patterns, and inferred audience reactions separately, with quoted evidence and explicit limits. An uncalibrated detector cannot establish authorship.
 
 ## See a real sample
 
@@ -27,11 +25,9 @@ A Codex Skill and Python CLI for examining public social-media content without p
 
 The included Chinese history-and-gaming parody deliberately has strong templated writing patterns but no verified origin evidence. Running the sample produces:
 
-| Separate question | Sample result | What it does **not** mean |
-| --- | --- | --- |
-| Are recognizable drafting patterns present? | `strong_ai_like_drafting_signals`; rule indicator **13** | Not 13%, not a calibrated probability, not proof of AI authorship |
-| Is there verified AI-origin evidence? | `insufficient_evidence`; confidence `low` | Missing evidence does not establish human authorship |
-| How might readers react? | Supplied supporter / neutral / skeptic views have low / medium / high aversion risk | These are inferred personas, not measured audience reactions |
+- Writing patterns: `strong_ai_like_drafting_signals`, with rule indicator **13**. This is not 13%, a calibrated probability, or proof of AI authorship.
+- Origin evidence: `insufficient_evidence`, confidence `low`. Missing evidence does not establish human authorship.
+- Reader reactions: supplied supporter / neutral / skeptic views have low / medium / high aversion risk. These are inferred personas, not measured audience reactions.
 
 The slide is an existing project demo artifact, not a live product screenshot. The CLI validates and incorporates the supplied reception JSON; it does not independently generate those reader views during this offline run.
 
@@ -78,13 +74,13 @@ The Skill workflow can work from public URLs, pasted text, images, or combinatio
 
 ## How the pieces fit
 
-| Layer | Responsibility | Main entry point |
-| --- | --- | --- |
-| Host Agent / Skill | Gather authorized public context; draft reader analysis before detector results; explain findings | [`SKILL.md`](SKILL.md) |
-| Case and reception validation | Check schema, source scope, quoted support and persona structure | [`social_ai_check.py`](scripts/social_ai_check.py), [`reception_schema.py`](scripts/reception_schema.py) |
-| Local text analysis | Describe Simplified-Chinese sentence/document patterns with transparent rules | [`local_text_detector.py`](scripts/local_text_detector.py), [`style_signals.py`](scripts/style_signals.py) |
-| Provenance and optional providers | Inspect available C2PA evidence and separately authorized external image analysis | [`c2pa_verify.py`](scripts/c2pa_verify.py), [`providers.py`](scripts/providers.py) |
-| Report | Preserve separate origin, practical-pattern and reception conclusions | [`evidence.py`](scripts/evidence.py) |
+| Layer and entry points | Responsibility |
+| --- | --- |
+| Host Agent / Skill<br>[`SKILL.md`](SKILL.md) | Gather authorized public context; draft reader analysis before detector results; explain findings |
+| Case and reception validation<br>[`social_ai_check.py`](scripts/social_ai_check.py), [`reception_schema.py`](scripts/reception_schema.py) | Check schema, source scope, quoted support and persona structure |
+| Local text analysis<br>[`local_text_detector.py`](scripts/local_text_detector.py), [`style_signals.py`](scripts/style_signals.py) | Describe Simplified-Chinese sentence/document patterns with transparent rules |
+| Provenance and optional providers<br>[`c2pa_verify.py`](scripts/c2pa_verify.py), [`providers.py`](scripts/providers.py) | Inspect available C2PA evidence and separately authorized external image analysis |
+| Report<br>[`evidence.py`](scripts/evidence.py) | Preserve separate origin, practical-pattern and reception conclusions |
 
 The OpenAI Build Week demo was built with Codex and used GPT-5.6 for its reasoning layer. That describes the demo workflow, not a mandatory model dependency embedded in the offline CLI. Runtime dependencies are pinned/ranged in [`scripts/requirements.txt`](scripts/requirements.txt).
 
