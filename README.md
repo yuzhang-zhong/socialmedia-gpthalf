@@ -4,6 +4,8 @@
 
 # SocialMedia GPTHalf
 
+**English** · [简体中文完整版](README.zh-CN.md)
+
 **Separate AI-origin evidence, writing patterns, and reader reactions.**
 
 来源证据、文本模式、读者感受，分开判断。
